@@ -10,6 +10,13 @@ def gedcom_parse(file):
     '''
     # Set of all tags which come after the arguments as opposed to before.
     SECOND_TAGS = {"INDI", "FAM"}
+
+    individuals = dict()
+    families = dict()
+    working = False
+    current_tag = ""
+    current_id = ""
+    date_tag = ""
     
     for line in file:
         line = line[:-1]
@@ -30,3 +37,58 @@ def gedcom_parse(file):
             args = " ".join(line[2:])
         print("<-- " + str(level) + '|' + tag + '|' +\
               ('Y' if (tag in TAGS and TAGS[tag] == level) else 'N') + '|' + args)
+
+        if working and level == 0:
+            if current_tag == "INDI":
+                individuals[current_id] = individual
+                individual = ""
+            elif current_tag == "FAM":
+                families[current_id] = family
+                family = ""
+            working = False
+
+        if tag == "INDI":
+            individual = Individual(args)
+            working = True
+            current_tag = tag
+            current_id = args
+        elif tag == "FAM":
+            family = Family(args)
+            working = True
+            current_tag = tag
+            current_id = args
+
+        if current_tag == "INDI":
+            if tag == "NAME":
+                individual.setName(args)
+            elif tag == "SEX":
+                individual.setSex(args)
+            elif tag == "BIRT" or tag == "DEAT":
+                date_tag = tag
+            elif tag == "FAMC":
+                individual.setFamC(args)
+            elif tag == "FAMS":
+                individual.addFamS(args)
+            elif tag == "DATE":
+                if date_tag == "BIRT":
+                    individual.setBirth(args)
+                    date_tag = ""
+                if date_tag == "DEAT":
+                    individual.setDeath(args)
+                    date_tag = ""
+        elif current_tag == "FAM":
+            if tag == "MARR" or tag == "DIV":
+                date_tag = tag
+            elif tag == "HUSB":
+                family.setHusb(args)
+            elif tag == "WIFE":
+                family.setWife(args)
+            elif tag == "CHIL":
+                family.addChild(args)
+            elif tag == "DATE":
+                if date_tag == "MARR":
+                    family.setMarr(args)
+                    date_tag = ""
+                if date_tag == "DIV":
+                    family.setDiv(args)
+                    date_tag = ""
