@@ -1,23 +1,59 @@
+from Individual import Individual
+from Family import Family
+
 # Dictionary with all valid tags within scope of project as keys, and their respective levels as values.
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
         "HUSB": 1, "WIFE": 1, "CHIL": 1, "DIV": 1, "DATE": 2, "HEAD": 0, "TRLR": 0, "NOTE": 0}
 
+individuals = dict()
+families = dict()
+
 def print_indi(dict):
-    longest_id = 0
-    longest_name = 0
+    longest_id = len("Individual ID")
+    longest_name = len("Individual Name")
 
-    for item in dict:
-        if len(item.getName) > longest_name:
-            longest_name = len(item.getName)
-        if len(item.getID) > longest_id:
-            longest_id = len(item.getID)
+    for key in dict:
+        if len(key) > longest_id:
+            longest_id = len(key)
+        if len(dict[key].getName()) > longest_name:
+            longest_name = len(dict[key].getName())
 
+    print(("{:<" + str(longest_id + 2) + "} {:<" + str(longest_name + 2) + "}").format("Individual ID", "Individual Name"))
     
-    
-
-    
+    for key in dict:
+        print(("{:<" + str(longest_id + 2) + "} {:<" + str(longest_name + 2) + "}").format(key, dict[key].getName()))
 
 def print_fam(dict):
+    longest_fam_id = len("Family ID")
+    longest_husb_id = len("Husband ID")
+    longest_husb_name = len("Husband Name")
+    longest_wife_id = len("Wife ID")
+    longest_wife_name = len("Wife Name")
+
+    for key in dict:
+        husb = dict[key].getHusb()
+        wife = dict[key].getWife()
+
+        if len(key) > longest_fam_id:
+            longest_fam_id = len(key)
+        if len(husb) > longest_husb_id:
+            longest_husb_id = len(husb)
+        if len(individuals[husb].getName()) > longest_husb_name:
+            longest_husb_name = len(individuals[husb].getName())
+        if len(wife) > longest_wife_id:
+            longest_wife_id = len(wife)
+        if len(individuals[wife].getName()) > longest_wife_name:
+            longest_wife_name = len(individuals[wife].getName())
+
+    print(("{:<" + str(longest_fam_id + 2) + "} {:<" + str(longest_husb_id + 2) + "} {:<" + str(longest_husb_name + 2) + "} {:<" + str(longest_wife_id + 2) + "} {:<" + str(longest_wife_name + 2) +\
+         "}").format("Family ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name"))
+    
+    for key in dict:
+        husb = dict[key].getHusb()
+        wife = dict[key].getWife()
+
+        print(("{:<" + str(longest_fam_id + 2) + "} {:<" + str(longest_husb_id + 2) + "} {:<" + str(longest_husb_name + 2) + "} {:<" + str(longest_wife_id + 2) + "} {:<" + str(longest_wife_name + 2) +\
+         "}").format(key, husb, individuals[husb].getName(), wife, individuals[wife].getName()))
 
 def gedcom_parse(file):
     '''
@@ -28,8 +64,6 @@ def gedcom_parse(file):
     # Set of all tags which come after the arguments as opposed to before.
     SECOND_TAGS = {"INDI", "FAM"}
 
-    individuals = dict()
-    families = dict()
     working = False
     current_tag = ""
     current_id = ""
@@ -37,7 +71,7 @@ def gedcom_parse(file):
     
     for line in file:
         line = line[:-1]
-        print("--> " + line)
+        # print("--> " + line)
         line = line.split(" ")
         level = int(line[0])
         tag_second = False # After if block is executed, either index of tag >= 2 or False.
@@ -52,8 +86,8 @@ def gedcom_parse(file):
         else:
             tag = line[1]
             args = " ".join(line[2:])
-        print("<-- " + str(level) + '|' + tag + '|' +\
-              ('Y' if (tag in TAGS and TAGS[tag] == level) else 'N') + '|' + args)
+        # print("<-- " + str(level) + '|' + tag + '|' +\
+        #       ('Y' if (tag in TAGS and TAGS[tag] == level) else 'N') + '|' + args)
 
         if working and level == 0:
             if current_tag == "INDI":
@@ -109,3 +143,14 @@ def gedcom_parse(file):
                 if date_tag == "DIV":
                     family.setDiv(args)
                     date_tag = ""
+
+def main():
+    gedcom_file = open("family.ged")
+    gedcom_parse(gedcom_file)
+    print_indi(individuals)
+    print()
+    print_fam(families)
+    gedcom_file.close()
+
+if __name__ == "__main__":
+    main()
