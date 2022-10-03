@@ -166,19 +166,28 @@ def marriageBeforeDivorce(fam):
         return fam.getMarr() <= fam.getDiv()
     return True
 
-def marriageBeforeDeath(fam):
+def marriageBeforeDeath(indi):
     '''Returns true if marriage date is not after death date of either spouse'''
-    husb = individuals[fam.getHusb()]
-    wife = individuals[fam.getWife()]
-    marr = fam.getMarr()
-
-    if husb.getDeath():
-        if husb.getDeath() < marr:
-            return False
-    if wife.getDeath():
-        if wife.getDeath() < marr:
-            return False
+    death = indi.getDeath()
+    if death:
+        for fam in indi.getFamS():
+            if death < families[fam].getMarr():
+                return False
     return True
+
+# def marriageBeforeDeath(fam):
+#     '''Returns true if marriage date is not after death date of either spouse'''
+#     husb = individuals[fam.getHusb()]
+#     wife = individuals[fam.getWife()]
+#     marr = fam.getMarr()
+
+#     if husb.getDeath():
+#         if husb.getDeath() < marr:
+#             return False
+#     if wife.getDeath():
+#         if wife.getDeath() < marr:
+#             return False
+#     return True
 
 def main(argv):
     if len(argv) != 2:
