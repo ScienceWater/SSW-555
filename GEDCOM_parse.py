@@ -1,6 +1,7 @@
 from Individual import Individual
 from Family import Family
 from Date import Date
+import sys
 
 # Dictionary with all valid tags within scope of project as keys, and their respective levels as values.
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
@@ -165,18 +166,13 @@ def marriageBeforeDivorce(fam):
         return fam.getMarr() <= fam.getDiv()
     return True
 
-def marriageBeforeDeath(fam):
+def marriageBeforeDeath(indi):
     '''Returns true if marriage date is not after death date of either spouse'''
-    husb = individuals[fam.getHusb()]
-    wife = individuals[fam.getWife()]
-    marr = fam.getMarr()
-
-    if husb.getDeath():
-        if husb.getDeath() < marr:
-            return False
-    if wife.getDeath():
-        if wife.getDeath() < marr:
-            return False
+    death = indi.getDeath()
+    if death:
+        for fam in indi.getFamS():
+            if death < families[fam].getMarr():
+                return False
     return True
 
 def errorCheck():
@@ -191,8 +187,19 @@ def errorCheck():
         if not marriageBeforeDivorce(fam):
             print("Error: Divorce date of Family " + fam + " is before marriage date.")
 
-def main():
-    gedcom_file = open("family.ged")
+def main(argv):
+    if len(argv) != 2:
+        print("Usage: " + str(argv[0]) + " <GEDCOM file>")
+        return
+
+    gedcom_file_name = str(argv[1])
+
+    try:
+        gedcom_file = open(gedcom_file_name)
+    except:
+        print("Invalid file name: File must be a GEDCOM file")
+        return
+        
     gedcom_parse(gedcom_file)
     print_indi(individuals)
     print()
@@ -202,4 +209,4 @@ def main():
     gedcom_file.close()
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
