@@ -145,7 +145,7 @@ def gedcom_parse(file):
                     family.setDiv(Date(args))
                     date_tag = ""
 
-def validMarriages(indi):
+def birthBeforeMarriage(indi):
     '''Returns true iff all marriages of indi are not before birth of indi.'''
     birth = indi.getBirth()
     for fam in indi.getFamS():
@@ -153,9 +153,31 @@ def validMarriages(indi):
             return False
     return True
 
-def validDeath(indi):
+def birthBeforeDeath(indi):
     '''Returns true iff death date is not before birth date.'''
-    return indi.getBirth() <= indi.getDeath()
+    if indi.getDeath():
+        return indi.getBirth() <= indi.getDeath()
+    return True
+
+def marriageBeforeDivorce(fam):
+    '''Returns true iff marriage date is not after divorce date'''
+    if fam.getDiv():
+        return fam.getMarr() <= fam.getDiv()
+    return True
+
+def marriageBeforeDeath(fam):
+    '''Returns true if marriage date is not after death date of either spouse'''
+    husb = individuals[fam.getHusb()]
+    wife = individuals[fam.getWife()]
+    marr = fam.getMarr()
+
+    if husb.getDeath():
+        if husb.getDeath() < marr:
+            return False
+    if wife.getDeath():
+        if wife.getDeath() < marr:
+            return False
+    return True
 
 def main():
     gedcom_file = open("family.ged")
