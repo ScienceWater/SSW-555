@@ -175,19 +175,17 @@ def marriageBeforeDeath(indi):
                 return False
     return True
 
-# def marriageBeforeDeath(fam):
-#     '''Returns true if marriage date is not after death date of either spouse'''
-#     husb = individuals[fam.getHusb()]
-#     wife = individuals[fam.getWife()]
-#     marr = fam.getMarr()
-
-#     if husb.getDeath():
-#         if husb.getDeath() < marr:
-#             return False
-#     if wife.getDeath():
-#         if wife.getDeath() < marr:
-#             return False
-#     return True
+def errorCheck():
+    for indi in individuals.values():
+        if not birthBeforeMarriage(indi):
+            print("Error: Marriage date of Individual " + indi + " is before their birth date.")
+        if not birthBeforeDeath(indi):
+            print("Error: Death date of Individual " + indi + " is before their birth date.")
+        if not marriageBeforeDeath(indi):
+            print("Error: Death date of Individual " + indi + " is before their marriage date.")
+    for fam in families.values():
+        if not marriageBeforeDivorce(fam):
+            print("Error: Divorce date of Family " + fam + " is before marriage date.")
 
 def main(argv):
     if len(argv) != 2:
@@ -206,6 +204,8 @@ def main(argv):
     print_indi(individuals)
     print()
     print_fam(families)
+    print()
+    errorCheck()
     gedcom_file.close()
 
 if __name__ == "__main__":
