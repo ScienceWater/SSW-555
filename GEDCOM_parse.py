@@ -179,12 +179,26 @@ def marriageBeforeDeath(fam):
             return False
     return True
 
+def errorCheck():
+    for indi in individuals:
+        if not birthBeforeMarriage(indi):
+            print("Error: Marriage date of Individual " + indi + " is before their birth date.")
+        if not birthBeforeDeath(indi):
+            print("Error: Death date of Individual " + indi + " is before their birth date.")
+        if not marriageBeforeDeath(indi):
+            print("Error: Death date of Individual " + indi + " is before their marriage date.")
+    for fam in families:
+        if not marriageBeforeDivorce(fam):
+            print("Error: Divorce date of Family " + fam + " is before marriage date.")
+
 def main():
     gedcom_file = open("family.ged")
     gedcom_parse(gedcom_file)
     print_indi(individuals)
     print()
     print_fam(families)
+    print()
+    errorCheck()
     gedcom_file.close()
 
 if __name__ == "__main__":
