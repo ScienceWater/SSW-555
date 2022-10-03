@@ -1,3 +1,5 @@
+from Date import Date
+
 class Individual():
 
     def __init__(self, id):

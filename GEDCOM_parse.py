@@ -1,5 +1,6 @@
 from Individual import Individual
 from Family import Family
+from Date import Date
 
 # Dictionary with all valid tags within scope of project as keys, and their respective levels as values.
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
@@ -122,10 +123,10 @@ def gedcom_parse(file):
                 individual.addFamS(args)
             elif tag == "DATE":
                 if date_tag == "BIRT":
-                    individual.setBirth(args)
+                    individual.setBirth(Date(args))
                     date_tag = ""
                 if date_tag == "DEAT":
-                    individual.setDeath(args)
+                    individual.setDeath(Date(args))
                     date_tag = ""
         elif current_tag == "FAM":
             if tag == "MARR" or tag == "DIV":
@@ -138,11 +139,23 @@ def gedcom_parse(file):
                 family.addChild(args)
             elif tag == "DATE":
                 if date_tag == "MARR":
-                    family.setMarr(args)
+                    family.setMarr(Date(args))
                     date_tag = ""
                 if date_tag == "DIV":
-                    family.setDiv(args)
+                    family.setDiv(Date(args))
                     date_tag = ""
+
+def validMarriages(indi):
+    '''Returns true iff all marriages of indi are not before birth of indi.'''
+    birth = indi.getBirth()
+    for fam in indi.getFamS():
+        if families[fam].getMarr() < birth:
+            return False
+    return True
+
+def validDeath(indi):
+    '''Returns true iff death date is not before birth date.'''
+    return indi.getBirth() <= indi.getDeath()
 
 def main():
     gedcom_file = open("family.ged")
