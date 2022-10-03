@@ -167,7 +167,7 @@ def marriageBeforeDivorce(fam):
     return True
 
 def marriageBeforeDeath(indi):
-    '''Returns true if marriage date is not after death date of either spouse'''
+    '''Returns true iff all marriage dates are not after death date'''
     death = indi.getDeath()
     if death:
         for fam in indi.getFamS():
