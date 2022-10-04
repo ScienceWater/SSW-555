@@ -2,6 +2,7 @@ from Individual import Individual
 from Family import Family
 from Date import Date
 import sys
+from prettytable import PrettyTable
 
 # Dictionary with all valid tags within scope of project as keys, and their respective levels as values.
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
@@ -10,52 +11,27 @@ TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS":
 individuals = dict()
 families = dict()
 
-def print_indi(dict):
-    longest_id = len("Individual ID")
-    longest_name = len("Individual Name")
+def tableFormatter(property):
+    if property:
+        return property
+    else:
+        return "N/A"
 
-    for key in dict:
-        if len(key) > longest_id:
-            longest_id = len(key)
-        if len(dict[key].getName()) > longest_name:
-            longest_name = len(dict[key].getName())
+def print_indi():
+    table = PrettyTable()
+    table.field_names = ["ID", "Name", "Gender", "Birthday", "Alive", "Death", "Child", "Spouse"]
+    for indi in individuals.values():
+        table.add_row([tableFormatter(indi.getID()), tableFormatter(indi.getName()), tableFormatter(indi.getSex()), tableFormatter(indi.getBirth()),\
+            not indi.getDeath(), tableFormatter(indi.getDeath()), tableFormatter(indi.getFamC()), tableFormatter(indi.getFamS())])
+    print(table)
 
-    print(("{:<" + str(longest_id + 2) + "} {:<" + str(longest_name + 2) + "}").format("Individual ID", "Individual Name"))
-    
-    for key in dict:
-        print(("{:<" + str(longest_id + 2) + "} {:<" + str(longest_name + 2) + "}").format(key, dict[key].getName()))
-
-def print_fam(dict):
-    longest_fam_id = len("Family ID")
-    longest_husb_id = len("Husband ID")
-    longest_husb_name = len("Husband Name")
-    longest_wife_id = len("Wife ID")
-    longest_wife_name = len("Wife Name")
-
-    for key in dict:
-        husb = dict[key].getHusb()
-        wife = dict[key].getWife()
-
-        if len(key) > longest_fam_id:
-            longest_fam_id = len(key)
-        if len(husb) > longest_husb_id:
-            longest_husb_id = len(husb)
-        if len(individuals[husb].getName()) > longest_husb_name:
-            longest_husb_name = len(individuals[husb].getName())
-        if len(wife) > longest_wife_id:
-            longest_wife_id = len(wife)
-        if len(individuals[wife].getName()) > longest_wife_name:
-            longest_wife_name = len(individuals[wife].getName())
-
-    print(("{:<" + str(longest_fam_id + 2) + "} {:<" + str(longest_husb_id + 2) + "} {:<" + str(longest_husb_name + 2) + "} {:<" + str(longest_wife_id + 2) + "} {:<" + str(longest_wife_name + 2) +\
-         "}").format("Family ID", "Husband ID", "Husband Name", "Wife ID", "Wife Name"))
-    
-    for key in dict:
-        husb = dict[key].getHusb()
-        wife = dict[key].getWife()
-
-        print(("{:<" + str(longest_fam_id + 2) + "} {:<" + str(longest_husb_id + 2) + "} {:<" + str(longest_husb_name + 2) + "} {:<" + str(longest_wife_id + 2) + "} {:<" + str(longest_wife_name + 2) +\
-         "}").format(key, husb, individuals[husb].getName(), wife, individuals[wife].getName()))
+def print_fam():
+    table = PrettyTable()
+    table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
+    for fam in families.values():
+        table.add_row([tableFormatter(fam.getID()), tableFormatter(fam.getMarr()), tableFormatter(fam.getDiv()), tableFormatter(fam.getHusb()),\
+            tableFormatter(individuals[fam.getHusb()].getName()), tableFormatter(fam.getWife()), tableFormatter(individuals[fam.getWife()].getName()), tableFormatter(fam.getChildren())])
+    print(table)
 
 def gedcom_parse(file):
     '''
@@ -201,9 +177,9 @@ def main(argv):
         return
 
     gedcom_parse(gedcom_file)
-    print_indi(individuals)
+    print_indi()
     print()
-    print_fam(families)
+    print_fam()
     print()
     errorCheck()
     gedcom_file.close()
