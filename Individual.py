@@ -1,5 +1,5 @@
 from Date import *
-from datetime import date, timedelta
+from datetime import date
 
 class Individual():
 
