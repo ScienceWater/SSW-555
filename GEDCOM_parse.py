@@ -1,8 +1,9 @@
 from Individual import Individual
 from Family import Family
-from Date import Date
+from Date import *
 import sys
 from prettytable import PrettyTable
+from datetime import date
 
 # Dictionary with all valid tags within scope of project as keys, and their respective levels as values.
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
@@ -162,6 +163,38 @@ def marriageBeforeDeath(indi):
                 return False
     return True
 
+def dateBeforeCurrent(d):
+    '''Returns true iff d is not after current date.'''
+    if not d: return True
+    current = date.today()
+    if d.year < current.year:
+        return True
+    elif d.year == current.year:
+        if MONTHS[d.month] < current.month:
+            return True
+        elif MONTHS[d.month] == current.month:
+            return d.day <= current.day
+        else:
+            return False
+    else:
+        return False
+
+def birthBeforeCurrent(indi):
+    '''Returns true iff birth date is not after current date.'''
+    return dateBeforeCurrent(indi.getBirth())
+
+def marriageBeforeCurrent(fam):
+    '''Returns true iff marriage date is not after current date.'''
+    return dateBeforeCurrent(fam.getMarr())
+
+def divorceBeforeCurrent(fam):
+    '''Returns true iff divorce date is not after current date.'''
+    return dateBeforeCurrent(fam.getDiv())
+
+def deathBeforeCurrent(indi):
+    '''Returns true iff death date is not after current date.'''
+    return dateBeforeCurrent(indi.getDeath())
+
 def anomalyCheck():
     for indi in individuals.values():
         if indi.getAge() >= 150:
@@ -175,9 +208,17 @@ def errorCheck():
             print("Error: Death date of Individual " + str(indi.getID()) + " is before their birth date.")
         if not marriageBeforeDeath(indi):
             print("Error: Death date of Individual " + str(indi.getID()) + " is before their marriage date.")
+        if not birthBeforeCurrent(indi):
+            print("Error: Birth date of Individual " + str(indi.getID()) + " is in the future.")
+        if not deathBeforeCurrent(indi):
+            print("Error: Death date of Individual " + str(indi.getID()) + " is in the future.")
     for fam in families.values():
         if not marriageBeforeDivorce(fam):
             print("Error: Divorce date of Family " + str(fam.getID()) + " is before marriage date.")
+        if not marriageBeforeCurrent(fam):
+            print("Error: Marriage date of Family " + str(fam.getID()) + " is in the future.")
+        if not divorceBeforeCurrent(fam):
+            print("Error: Divorce date of Family " + str(fam.getID()) + " is in the future.")
 
 def main(argv):
     if len(argv) != 2:
