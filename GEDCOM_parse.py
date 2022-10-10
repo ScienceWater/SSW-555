@@ -19,10 +19,10 @@ def tableFormatter(property):
 
 def print_indi():
     table = PrettyTable()
-    table.field_names = ["ID", "Name", "Gender", "Birthday", "Alive", "Death", "Child", "Spouse"]
+    table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
     for indi in individuals.values():
         table.add_row([tableFormatter(indi.getID()), tableFormatter(indi.getName()), tableFormatter(indi.getSex()), tableFormatter(indi.getBirth()),\
-            not indi.getDeath(), tableFormatter(indi.getDeath()), tableFormatter(indi.getFamC()), tableFormatter(indi.getFamS())])
+            tableFormatter(indi.getAge()), not indi.getDeath(), tableFormatter(indi.getDeath()), tableFormatter(indi.getFamC()), tableFormatter(indi.getFamS())])
     print(table)
 
 def sort_children(unsorted_children):
