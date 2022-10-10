@@ -151,6 +151,11 @@ def marriageBeforeDeath(indi):
                 return False
     return True
 
+def anomalyCheck():
+    for indi in individuals.values():
+        if indi.getAge() >= 150:
+            print("Anomaly: Individual " + str(indi.getID()) + " is " + str(indi.getAge()) + " years old. Are you sure that's correct?")
+
 def errorCheck():
     for indi in individuals.values():
         if not birthBeforeMarriage(indi):
@@ -182,6 +187,7 @@ def main(argv):
     print_fam()
     print()
     errorCheck()
+    anomalyCheck()
     gedcom_file.close()
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
-from Date import Date
+from Date import *
+from datetime import date, timedelta
 
 class Individual():
 
@@ -49,3 +50,12 @@ class Individual():
     
     def getFamS(self):
         return self.__famS
+
+    def getAge(self):
+        today = date.today()
+        diff = today.year - self.__birth.year
+        if today.month < MONTHS[self.__birth.month]:
+            diff -= 1
+        elif today.month == MONTHS[self.__birth.month] and today.day < self.__birth.day:
+            diff -= 1
+        return diff
