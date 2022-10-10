@@ -59,3 +59,6 @@ class Individual():
         elif today.month == MONTHS[self.__birth.month] and today.day < self.__birth.day:
             diff -= 1
         return diff
+
+    def __lt__(self, other):
+        return self.getBirth() < other.getBirth()
