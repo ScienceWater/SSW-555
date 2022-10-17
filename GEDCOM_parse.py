@@ -176,8 +176,11 @@ def errorCheck():
         if not marriageBeforeDeath(indi):
             print("Error: Death date of Individual " + str(indi.getID()) + " is before their marriage date.")
     for fam in families.values():
-        if not marriageBeforeDivorce(fam):
-            print("Error: Divorce date of Family " + str(fam.getID()) + " is before marriage date.")
+        # if not marriageBeforeDivorce(fam):
+        #     print("Error: Divorce date of Family " + str(fam.getID()) + " is before marriage date.")
+        if fam.getDiv():
+            if fam.getMarr() > fam.getDiv():
+                print("Error: Divorce date of Family " + str(fam.getID()) + " is before marriage date.")
 
 def main(argv):
     if len(argv) != 2:
