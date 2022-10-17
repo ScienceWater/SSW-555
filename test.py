@@ -24,19 +24,19 @@ class TestSprint1(unittest.TestCase):
 
     def testStory4(self):
         '''Marriage before divorce'''
-        self.assertFalse(marriageBeforeDivorce(families["@F1@"])) # marriage date after divorce date (Gru & Lucy)
-        self.assertTrue(marriageBeforeDivorce(families["@F4@"])) # marriage date same as divorce date (Kevin & Margo)
-        self.assertTrue(marriageBeforeDivorce(families["@F5@"])) # marriage date before divorce date (Bob & Isabelle)
-        self.assertTrue(marriageBeforeDivorce(families["@F2@"])) # no divorce date (Stuart & Agnes)
-        self.assertTrue(marriageBeforeDivorce(families["@F3@"])) # no divorce date for same husband (Stuart & Edith)
+        self.assertFalse(marriage_before_divorce(families["@F1@"])) # marriage date after divorce date (Gru & Lucy)
+        self.assertTrue(marriage_before_divorce(families["@F4@"])) # marriage date same as divorce date (Kevin & Margo)
+        self.assertTrue(marriage_before_divorce(families["@F5@"])) # marriage date before divorce date (Bob & Isabelle)
+        self.assertTrue(marriage_before_divorce(families["@F2@"])) # no divorce date (Stuart & Agnes)
+        self.assertTrue(marriage_before_divorce(families["@F3@"])) # no divorce date for same husband (Stuart & Edith)
 
     def testStory5(self):
         '''Marriage before death'''
-        self.assertFalse(marriageBeforeDeath(individuals["@I8@"])) # marriage date after death date (Edith)
-        self.assertTrue(marriageBeforeDeath(individuals["@I6@"])) # marriage date same as death date (Margo)
-        self.assertTrue(marriageBeforeDeath(individuals["@I10@"])) # marriage date before death date (Agnes)
-        self.assertTrue(marriageBeforeDeath(individuals["@I3@"])) # marriage, no death (Lucy)
-        self.assertTrue(marriageBeforeDeath(individuals["@I11@"])) # no marriage, no death (Dave)
+        self.assertFalse(marriage_before_death(individuals["@I8@"])) # marriage date after death date (Edith)
+        self.assertTrue(marriage_before_death(individuals["@I6@"])) # marriage date same as death date (Margo)
+        self.assertTrue(marriage_before_death(individuals["@I10@"])) # marriage date before death date (Agnes)
+        self.assertTrue(marriage_before_death(individuals["@I3@"])) # marriage, no death (Lucy)
+        self.assertTrue(marriage_before_death(individuals["@I11@"])) # no marriage, no death (Dave)
 
     gedcom_file.close()
 
