@@ -51,6 +51,14 @@ class TestSprint1(unittest.TestCase):
         self.assertEqual(individuals["@I8@"].getAge(), 33) # Edith (adult & dead)
         self.assertEqual(individuals["@I2@"].getAge(), 80) # Gru (senior & alive)
 
+    def testStory28(self):
+        '''Order siblings by age'''
+        self.assertEqual(sort_children(families['@F1@'].getChildren()), ['@I5@', '@I4@', '@I1@']) # family with 3 children
+        self.assertEqual(sort_children(families['@F2@'].getChildren()), ['@I11@']) # family with 1 child (husband is spouse in two families)
+        self.assertEqual(sort_children(families['@F3@'].getChildren()), ['@I9@']) # family with 1 child (husband is spouse in two families, wife is dead)
+        self.assertEqual(sort_children(families['@F4@'].getChildren()), ['@I7@']) # family with 1 child (divorced)
+        self.assertEqual(sort_children(families['@F5@'].getChildren()), []) # family with no children
+
     gedcom_file.close()
 
 if __name__ == '__main__':
