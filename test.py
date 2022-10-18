@@ -8,6 +8,14 @@ class TestSprint1(unittest.TestCase):
     gedcom_file = open("error.ged")
     gedcom_parse(gedcom_file)
 
+    def testStory1(self):
+        '''Dates before current date (note these test cases will only all work properly before 2099)'''
+        self.assertFalse(birthBeforeCurrent(individuals["@I7@"])) # born after today (Tim)
+        self.assertFalse(marriageBeforeCurrent(families["@F1@"])) # married after today (Gru and Lucy)
+        self.assertFalse(divorceBeforeCurrent(families["@F5@"])) # divorced after today (Bob and Isabelle)
+        self.assertFalse(deathBeforeCurrent(individuals["@I9@"])) # died after today (Otto))
+        self.assertTrue(birthBeforeCurrent(individuals["@I2@"])) # not born before today (Gru)
+            
     def testStory2(self):
         '''Birth before marriage'''
         self.assertFalse(birthBeforeMarriage(individuals["@I10@"])) # married before born (Agnes)
