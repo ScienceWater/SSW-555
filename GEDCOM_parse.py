@@ -195,9 +195,14 @@ def deathBeforeCurrent(indi):
     '''Returns true iff death date is not after current date.'''
     return dateBeforeCurrent(indi.getDeath())
 
+def under150Years(indi):
+    '''Returns true iff indi is less than 150 years old (individuals with no birth date are assumed to be under 150).'''
+    age = indi.getAge()
+    return (not age) or age < 150
+
 def anomalyCheck():
     for indi in individuals.values():
-        if indi.getAge() and indi.getAge() >= 150:
+        if not under150Years(indi):
             print("Anomaly: Individual " + str(indi.getID()) + " is " + str(indi.getAge()) + " years old. Are you sure that's correct?")
 
 def errorCheck():

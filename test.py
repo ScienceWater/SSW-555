@@ -50,11 +50,11 @@ class TestSprint1(unittest.TestCase):
     
     def testStory7(self):
         '''Less than 150 years old (note these test cases will only work properly for the rest of the semester)'''
-        self.assertFalse(individuals["@I2@"].getAge() < 150) # older than 150 years old (Gru)
-        self.assertFalse(individuals["@I3@"].getAge() < 150) # 150 years old (Lucy)
-        self.assertTrue(individuals["@I1@"].getAge() < 150) # less than 150 years old (Bob)
-        self.assertTrue(individuals["@I11@"].getAge() < 150) # 1 year old (Dave)
-        self.assertTrue(individuals["@I7@"].getAge() < 150) # not born yet/negative age (Tim)
+        self.assertFalse(under150Years(individuals["@I2@"])) # older than 150 years old (Gru)
+        self.assertFalse(under150Years(individuals["@I3@"])) # 150 years old (Lucy)
+        self.assertTrue(under150Years(individuals["@I1@"])) # less than 150 years old (Bob)
+        self.assertTrue(under150Years(individuals["@I11@"])) # 1 year old (Dave)
+        self.assertTrue(under150Years(individuals["@I7@"])) # not born yet/negative age (Tim)
 
     # only functional until next birthday occurs (Jan 5)
     def testStory27(self):
