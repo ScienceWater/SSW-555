@@ -1,4 +1,6 @@
+import datetime
 import unittest
+from unittest.mock import patch
 from GEDCOM_parse import *
 
 class TestSprint1(unittest.TestCase):
@@ -37,6 +39,17 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(marriage_before_death(individuals["@I10@"])) # marriage date before death date (Agnes)
         self.assertTrue(marriage_before_death(individuals["@I3@"])) # marriage, no death (Lucy)
         self.assertTrue(marriage_before_death(individuals["@I11@"])) # no marriage, no death (Dave)
+
+    # @patch('datetime.date.today')
+    # def testStory27(self, mock_today):
+    def testStory27(self):
+        '''Include individual ages'''
+        # mock_today.return_value = datetime.date(2022, 10, 17)
+        self.assertEqual(individuals["@I11@"].getAge(), 1) # Dave (young & alive)
+        self.assertEqual(individuals["@I6@"].getAge(), 7) # Margo (young & dead)
+        self.assertEqual(individuals["@I1@"].getAge(), 30) # Bob (adult & alive)
+        self.assertEqual(individuals["@I8@"].getAge(), 33) # Edith (adult & dead)
+        self.assertEqual(individuals["@I2@"].getAge(), 80) # Gru (senior & alive)
 
     gedcom_file.close()
 
