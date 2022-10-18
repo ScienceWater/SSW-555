@@ -22,8 +22,8 @@ def print_indi():
     table = PrettyTable()
     table.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
     for indi in individuals.values():
-        table.add_row([tableFormatter(indi.getID()), tableFormatter(indi.getName()), tableFormatter(indi.getSex()), tableFormatter(indi.getBirth()),\
-            tableFormatter(indi.getAge()), not indi.getDeath(), tableFormatter(indi.getDeath()), tableFormatter(indi.getFamC()), tableFormatter(indi.getFamS())])
+        table.add_row(list(map(tableFormatter, [indi.getID(), indi.getName(), indi.getSex(), indi.getBirth(),\
+            indi.getAge(), "No" if indi.getDeath() else "Yes", indi.getDeath(), indi.getFamC(), indi.getFamS()])))
     print(table)
 
 def sort_children(unsorted_children):
@@ -40,9 +40,9 @@ def print_fam():
     table = PrettyTable()
     table.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
     for fam in families.values():
-        table.add_row([tableFormatter(fam.getID()), tableFormatter(fam.getMarr()), tableFormatter(fam.getDiv()), tableFormatter(fam.getHusb()),\
-            tableFormatter(individuals[fam.getHusb()].getName()), tableFormatter(fam.getWife()), tableFormatter(individuals[fam.getWife()].getName()),\
-                tableFormatter(sort_children(fam.getChildren()))])
+        table.add_row(list(map(tableFormatter, [fam.getID(), fam.getMarr(), fam.getDiv(), fam.getHusb(),\
+            individuals[fam.getHusb()].getName(), fam.getWife(), individuals[fam.getWife()].getName(),\
+                sort_children(fam.getChildren())])))
     print(table)
 
 def gedcom_parse(file):
