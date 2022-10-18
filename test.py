@@ -47,6 +47,14 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(marriage_before_death(individuals["@I10@"])) # marriage date before death date (Agnes)
         self.assertTrue(marriage_before_death(individuals["@I3@"])) # marriage, no death (Lucy)
         self.assertTrue(marriage_before_death(individuals["@I11@"])) # no marriage, no death (Dave)
+    
+    def testStory7(self):
+        '''Less than 150 years old (note these test cases will only work properly for the rest of the semester)'''
+        self.assertFalse(individuals["@I2@"].getAge() < 150) # older than 150 years old (Gru)
+        self.assertFalse(individuals["@I3@"].getAge() < 150) # 150 years old (Lucy)
+        self.assertTrue(individuals["@I1@"].getAge() < 150) # less than 150 years old (Bob)
+        self.assertTrue(individuals["@I11@"].getAge() < 150) # 1 year old (Dave)
+        self.assertTrue(individuals["@I7@"].getAge() < 150) # not born yet/negative age (Tim)
 
     # @patch('datetime.date.today')
     # def testStory27(self, mock_today):
@@ -57,7 +65,7 @@ class TestSprint1(unittest.TestCase):
         self.assertEqual(individuals["@I6@"].getAge(), 7) # Margo (young & dead)
         self.assertEqual(individuals["@I1@"].getAge(), 30) # Bob (adult & alive)
         self.assertEqual(individuals["@I8@"].getAge(), 33) # Edith (adult & dead)
-        self.assertEqual(individuals["@I2@"].getAge(), 80) # Gru (senior & alive)
+        self.assertEqual(individuals["@I2@"].getAge(), 180) # Gru (senior & alive)
 
     def testStory28(self):
         '''Order siblings by age'''
