@@ -197,7 +197,7 @@ def deathBeforeCurrent(indi):
 
 def anomalyCheck():
     for indi in individuals.values():
-        if indi.getAge() >= 150:
+        if indi.getAge() and indi.getAge() >= 150:
             print("Anomaly: Individual " + str(indi.getID()) + " is " + str(indi.getAge()) + " years old. Are you sure that's correct?")
 
 def errorCheck():

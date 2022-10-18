@@ -8,6 +8,14 @@ class TestSprint1(unittest.TestCase):
     gedcom_file = open("error.ged")
     gedcom_parse(gedcom_file)
 
+    def testStory1(self):
+        '''Dates before current date (note these test cases will only all work properly before 2099)'''
+        self.assertFalse(birthBeforeCurrent(individuals["@I7@"])) # born after today (Tim)
+        self.assertFalse(marriageBeforeCurrent(families["@F1@"])) # married after today (Gru and Lucy)
+        self.assertFalse(divorceBeforeCurrent(families["@F5@"])) # divorced after today (Bob and Isabelle)
+        self.assertFalse(deathBeforeCurrent(individuals["@I9@"])) # died after today (Otto))
+        self.assertTrue(birthBeforeCurrent(individuals["@I2@"])) # not born before today (Gru)
+            
     def testStory2(self):
         '''Birth before marriage'''
         self.assertFalse(birthBeforeMarriage(individuals["@I10@"])) # married before born (Agnes)
@@ -39,6 +47,14 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(marriage_before_death(individuals["@I10@"])) # marriage date before death date (Agnes)
         self.assertTrue(marriage_before_death(individuals["@I3@"])) # marriage, no death (Lucy)
         self.assertTrue(marriage_before_death(individuals["@I11@"])) # no marriage, no death (Dave)
+    
+    def testStory7(self):
+        '''Less than 150 years old (note these test cases will only work properly for the rest of the semester)'''
+        self.assertFalse(individuals["@I2@"].getAge() < 150) # older than 150 years old (Gru)
+        self.assertFalse(individuals["@I3@"].getAge() < 150) # 150 years old (Lucy)
+        self.assertTrue(individuals["@I1@"].getAge() < 150) # less than 150 years old (Bob)
+        self.assertTrue(individuals["@I11@"].getAge() < 150) # 1 year old (Dave)
+        self.assertTrue(individuals["@I7@"].getAge() < 150) # not born yet/negative age (Tim)
 
     # only functional until next birthday occurs (Jan 5)
     def testStory27(self):
@@ -47,7 +63,7 @@ class TestSprint1(unittest.TestCase):
         self.assertEqual(individuals["@I6@"].getAge(), 7) # Margo (young & dead)
         self.assertEqual(individuals["@I4@"].getAge(), 33) # Stuart (adult & alive)
         self.assertEqual(individuals["@I8@"].getAge(), 33) # Edith (adult & dead)
-        self.assertEqual(individuals["@I2@"].getAge(), 80) # Gru (senior & alive)
+        self.assertEqual(individuals["@I2@"].getAge(), 180) # Gru (senior & alive)
 
     def testStory28(self):
         '''Order siblings by age'''
