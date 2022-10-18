@@ -53,12 +53,14 @@ class Individual():
 
     def getAge(self):
         today = date.today()
-        diff = today.year - self.__birth.year
-        if today.month < MONTHS[self.__birth.month]:
-            diff -= 1
-        elif today.month == MONTHS[self.__birth.month] and today.day < self.__birth.day:
-            diff -= 1
-        return diff
+        if self.__birth:
+            diff = today.year - self.__birth.year
+            if today.month < MONTHS[self.__birth.month]:
+                diff -= 1
+            elif today.month == MONTHS[self.__birth.month] and today.day < self.__birth.day:
+                diff -= 1
+            return diff
+        else: return False
 
     def __lt__(self, other):
         return self.getBirth() < other.getBirth()
