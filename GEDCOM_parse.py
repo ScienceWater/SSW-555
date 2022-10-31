@@ -258,6 +258,17 @@ def upcomingBirthday(indi):
     else:
         return False
 
+def upcomingAnniversary(fam):
+    '''Returns true iff fam's anniversary is within the next UPCOMING_LIMIT days.'''
+    if fam.getMarr() and not fam.getDiv():
+        today = date.today()
+        anniversary = fam.getMarr().__copy()
+        anniversary_this_year = Date(str(anniversary.day) + " " + list(MONTHS.keys())[anniversary.month - 1] + " " + str(today.year))
+        anniversary_next_year = Date(str(anniversary.day) + " " + list(MONTHS.keys())[anniversary.month - 1] + " " + str(today.year + 1))
+        return today.withinRange(anniversary_this_year, UPCOMING_LIMIT) or today.withinRange(anniversary_next_year, UPCOMING_LIMIT)
+    else:
+        return False
+
 def anomalyCheck():
     for indi in individuals.values():
         if not under150Years(indi):
