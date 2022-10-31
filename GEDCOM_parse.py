@@ -247,6 +247,16 @@ def recentDateCheck():
     if recentBirths or recentDeaths:
         print()
 
+def upcomingBirthday(indi):
+    '''Returns true iff indi's birthday is within the next UPCOMING_LIMIT days.'''
+    if indi.getBirth():
+        today = date.today()
+        birthday = indi.getBirth().__copy()
+        birthday_this_year = Date(str(birthday.day) + " " + list(MONTHS.keys())[birthday.month - 1] + " " + str(today.year))
+        birthday_next_year = Date(str(birthday.day) + " " + list(MONTHS.keys())[birthday.month - 1] + " " + str(today.year + 1))
+        return today.withinRange(birthday_this_year, UPCOMING_LIMIT) or today.withinRange(birthday_next_year, UPCOMING_LIMIT)
+    else:
+        return False
 
 def anomalyCheck():
     for indi in individuals.values():
