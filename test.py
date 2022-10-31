@@ -85,10 +85,10 @@ class TestSprint1(unittest.TestCase):
     def testStory36(self):
         '''List recent deaths (test cases directly access withinRange function for consistent results regardless of current date)'''
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), 0)) # same day, should be true if range is 0
-        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("17 JAN 2015"), 1)) # same day, should be true if range is positive
-        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("17 JAN 2015"), -5000)) # same day, should be true if range is negative
-        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be true if range is 10
-        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be false if range is -10
+        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), 1)) # same day, should be true if range is positive
+        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), -5000)) # same day, should be true if range is negative
+        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be true if range is 10
+        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be false if range is -10
 
     gedcom_file.close()
 
