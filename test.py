@@ -2,6 +2,7 @@ import datetime
 import unittest
 from unittest.mock import patch
 from GEDCOM_parse import *
+from Date import *
 
 class TestSprint1(unittest.TestCase):
 
@@ -72,6 +73,22 @@ class TestSprint1(unittest.TestCase):
         self.assertEqual(sort_children(families['@F3@'].getChildren()), ['@I9@']) # family with 1 child (husband is spouse in two families, wife is dead)
         self.assertEqual(sort_children(families['@F4@'].getChildren()), ['@I7@']) # family with 1 child (divorced)
         self.assertEqual(sort_children(families['@F5@'].getChildren()), []) # family with no children
+    
+    def testStory35(self):
+        '''List recent births (test cases directly access withinRange function for consistent results regardless of current date)'''
+        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("12 NOV 1991"), 0)) # same day, should be true if range is 0
+        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("12 NOV 1991"), 1)) # same day, should be true if range is positive
+        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("12 NOV 1991"), -5000)) # same day, should be true if range is negative
+        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("21 NOV 1991"), 10)) # 9 days after, should be true if range is 10
+        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("21 NOV 1991"), 10)) # 9 days after, should be false if range is -10
+    
+    def testStory36(self):
+        '''List recent deaths (test cases directly access withinRange function for consistent results regardless of current date)'''
+        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), 0)) # same day, should be true if range is 0
+        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("17 JAN 2015"), 1)) # same day, should be true if range is positive
+        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("17 JAN 2015"), -5000)) # same day, should be true if range is negative
+        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be true if range is 10
+        self.assertTrue(individuals["@I1@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be false if range is -10
 
     gedcom_file.close()
 
