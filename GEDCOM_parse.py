@@ -140,20 +140,21 @@ def gedcom_parse(file):
 def birthBeforeMarriage(indi):
     '''Returns true iff all marriages of indi are not before birth of indi. (User Story 2)'''
     birth = indi.getBirth()
-    for fam in indi.getFamS():
-        if families[fam].getMarr() < birth:
-            return False
+    if birth:
+        for fam in indi.getFamS():
+            if families[fam].getMarr() < birth:
+                return False
     return True
 
 def birthBeforeDeath(indi):
     '''Returns true iff death date is not before birth date. (User Story 3)'''
-    if indi.getDeath():
+    if indi.getBirth() and indi.getDeath():
         return indi.getBirth() <= indi.getDeath()
     return True
 
 def marriage_before_divorce(fam):
     '''Returns true iff marriage date is not after divorce date. (User Story 4)'''
-    if fam.getDiv():
+    if fam.getMarr() and fam.getDiv():
         return fam.getMarr() <= fam.getDiv()
     return True
 
@@ -205,9 +206,12 @@ def under150Years(indi):
 
 def birthIsRecent(indi):
     '''Returns true iff indi was born within the past RECENT_LIMIT days.'''
-    today = date.today()
-    today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
-    return indi.getBirth().withinRange(today, RECENT_LIMIT)
+    if indi.getBirth():
+        today = date.today()
+        today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
+        return indi.getBirth().withinRange(today, RECENT_LIMIT)
+    else:
+        return False
 
 def deathIsRecent(indi):
     '''Returns true iff indi has died within the past RECENT_LIMIT days.'''
