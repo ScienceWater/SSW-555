@@ -251,9 +251,10 @@ def upcomingBirthday(indi):
     '''Returns true iff indi's birthday is within the next UPCOMING_LIMIT days.'''
     if indi.getBirth():
         today = date.today()
-        birthday = indi.getBirth().__copy()
-        birthday_this_year = Date(str(birthday.day) + " " + list(MONTHS.keys())[birthday.month - 1] + " " + str(today.year))
-        birthday_next_year = Date(str(birthday.day) + " " + list(MONTHS.keys())[birthday.month - 1] + " " + str(today.year + 1))
+        today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
+        birthday = indi.getBirth()
+        birthday_this_year = Date(str(birthday.day) + " " + birthday.month + " " + str(today.year))
+        birthday_next_year = Date(str(birthday.day) + " " + birthday.month + " " + str(today.year + 1))
         return today.withinRange(birthday_this_year, UPCOMING_LIMIT) or today.withinRange(birthday_next_year, UPCOMING_LIMIT)
     else:
         return False
@@ -262,9 +263,10 @@ def upcomingAnniversary(fam):
     '''Returns true iff fam's anniversary is within the next UPCOMING_LIMIT days.'''
     if fam.getMarr() and not fam.getDiv():
         today = date.today()
-        anniversary = fam.getMarr().__copy()
-        anniversary_this_year = Date(str(anniversary.day) + " " + list(MONTHS.keys())[anniversary.month - 1] + " " + str(today.year))
-        anniversary_next_year = Date(str(anniversary.day) + " " + list(MONTHS.keys())[anniversary.month - 1] + " " + str(today.year + 1))
+        today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
+        anniversary = fam.getMarr()
+        anniversary_this_year = Date(str(anniversary.day) + " " + anniversary.month + " " + str(today.year))
+        anniversary_next_year = Date(str(anniversary.day) + " " + anniversary.month + " " + str(today.year + 1))
         return today.withinRange(anniversary_this_year, UPCOMING_LIMIT) or today.withinRange(anniversary_next_year, UPCOMING_LIMIT)
     else:
         return False
@@ -342,6 +344,7 @@ def main(argv):
     print_fam()
     print()
     recentDateCheck()
+    upcomingDateCheck()
     errorCheck()
     anomalyCheck()
     gedcom_file.close()
