@@ -295,7 +295,7 @@ def upcomingDateCheck():
         table = PrettyTable()
         table.field_names = ["ID", "Husband Name", "Wife Name", "Marriage Date"]
         for fam in upcomingAnniversaries:
-            table.add_row([fam.getID(), fam.getHusb().getName(), fam.getWife().getName(), fam.getMarr()])
+            table.add_row([fam.getID(), individuals[fam.getHusb()].getName(), individuals[fam.getWife()].getName(), fam.getMarr()])
         print(table)
     if upcomingBirthdays or upcomingAnniversaries:
         print()    
