@@ -9,6 +9,9 @@ from datetime import date
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
         "HUSB": 1, "WIFE": 1, "CHIL": 1, "DIV": 1, "DATE": 2, "HEAD": 0, "TRLR": 0, "NOTE": 0}
 
+RECENT_LIMIT = 20 # Maximum number of days before today a date can be to be considered "recent."
+UPCOMING_LIMIT = 20 # Maximum number of days after today a date can be to be considered "upcoming."
+
 individuals = dict()
 families = dict()
 
@@ -200,6 +203,47 @@ def under150Years(indi):
     age = indi.getAge()
     return (not age) or age < 150
 
+def birthIsRecent(indi):
+    '''Returns true iff indi was born within the past RECENT_LIMIT days.'''
+    today = date.today()
+    today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
+    return indi.getBirth().withinRange(today, RECENT_LIMIT)
+
+def deathIsRecent(indi):
+    '''Returns true iff indi has died within the past RECENT_LIMIT days.'''
+    if indi.getDeath():
+        today = date.today()
+        today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
+        return indi.getDeath().withinRange(today, -RECENT_LIMIT)
+    else:
+        return False
+
+def recentDateCheck():
+    recentBirths = []
+    recentDeaths = []
+    for indi in individuals.values():
+        if birthIsRecent(indi):
+            recentBirths += [indi]
+        if deathIsRecent(indi):
+            recentDeaths += [indi]
+    if recentBirths:
+        print("\nThe following people were born recently (within the last " + str(RECENT_LIMIT) + " days):")
+        table = PrettyTable()
+        table.field_names = ["ID", "Name", "Birthday"]
+        for indi in recentBirths:
+            table.add_row([indi.getID(), indi.getName(), indi.getBirth()])
+        print(table)
+    if recentDeaths:
+        print("\nThe following people have died recently (within the last " + str(RECENT_LIMIT) + " days):")
+        table = PrettyTable()
+        table.field_names = ["ID", "Name", "Death Date"]
+        for indi in recentDeaths:
+            table.add_row([indi.getID(), indi.getName(), indi.getDeath()])
+        print(table)
+    if recentBirths or recentDeaths:
+        print()
+
+
 def anomalyCheck():
     for indi in individuals.values():
         if not under150Years(indi):
@@ -243,6 +287,7 @@ def main(argv):
     print()
     print_fam()
     print()
+    recentDateCheck()
     errorCheck()
     anomalyCheck()
     gedcom_file.close()

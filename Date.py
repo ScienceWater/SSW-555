@@ -55,3 +55,44 @@ class Date():
             return MONTHS[self.month] < MONTHS[other.month]
         else:
             return self.day <= other.day
+    
+    def __isLeapYear(self):
+        return (self.year % 4 == 0 and self.year % 100 != 0) or self.year % 400 == 0
+    
+    def __copy(self):
+        return Date(self.__str__())
+    
+    def __daysInMonth(self):
+        if self.month == "FEB" and self.__isLeapYear():
+            return 29
+        else:
+            return DAYS_IN_MONTH[MONTHS[self.month]]
+    
+    def __addDays(self, days):
+        '''Returns a new date 'days' days after self.'''
+        self = self.__copy()
+        self.day += days
+        while self.day > self.__daysInMonth():
+            self.day -= self.__daysInMonth()
+            if self.month == "DEC":
+                self.month = "JAN"
+                self.year += 1
+            else:
+                self.month = list(MONTHS.keys())[list(MONTHS.values()).index(MONTHS[self.month]) + 1]
+        while self.day < 1:
+            if self.month == "JAN":
+                self.month = "DEC"
+                self.year -= 1
+            else:
+                self.month = list(MONTHS.keys())[list(MONTHS.values()).index(MONTHS[self.month]) - 1]
+            self.day += self.__daysInMonth()
+        return self
+
+    def withinRange(self, other, range):
+        '''Returns true iff self <= other <= self + range (if range is positive)
+           or self + range <= other <= self (if range is negative).'''
+        limit = self.__addDays(range)
+        if range > 0:
+            return self <= other <= limit
+        else:
+            return limit <= other <= self
