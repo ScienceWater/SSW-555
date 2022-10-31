@@ -269,6 +269,35 @@ def upcomingAnniversary(fam):
     else:
         return False
 
+def upcomingDateCheck():
+    '''Checks for and prints (if applicable) events (birthdays & anniversaries) within the next UPCOMING_LIMIT days.'''
+    upcomingBirthdays = []
+    upcomingAnniversaries = []
+
+    for indi in individuals.values():
+        if upcomingBirthday(indi):
+            upcomingBirthdays += [indi]
+    for fam in families.values():
+        if upcomingAnniversary(fam):
+            upcomingAnniversaries += [fam]
+
+    if upcomingBirthdays:
+        print("\nThe following people have upcoming birthdays (within the next " + str(UPCOMING_LIMIT) + " days):")
+        table = PrettyTable()
+        table.field_names = ["ID", "Name", "Birthday"]
+        for indi in upcomingBirthdays:
+            table.add_row([indi.getID(), indi.getName(), indi.getBirth()])
+        print(table)
+    if upcomingAnniversaries:
+        print("\nThe following families have upcoming anniversaries (within the next " + str(UPCOMING_LIMIT) + " days):")
+        table = PrettyTable()
+        table.field_names = ["ID", "Husband Name", "Wife Name", "Marriage Date"]
+        for fam in upcomingAnniversaries:
+            table.add_row([fam.getID(), fam.getHusb().getName(), fam.getWife().getName(), fam.getMarr()])
+        print(table)
+    if upcomingBirthdays or upcomingAnniversaries:
+        print()    
+
 def anomalyCheck():
     for indi in individuals.values():
         if not under150Years(indi):
