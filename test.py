@@ -57,9 +57,8 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(under150Years(individuals["@I11@"])) # 1 year old (Dave)
         self.assertTrue(under150Years(individuals["@I7@"])) # not born yet/negative age (Tim)
 
-    # only functional until next birthday occurs (Jan 5)
     def testStory27(self):
-        '''Include individual ages'''
+        '''Include individual ages (note these test cases will only work properly for the rest of the semester)'''
         self.assertEqual(individuals["@I11@"].getAge(), 1) # Dave (young & alive)
         self.assertEqual(individuals["@I6@"].getAge(), 7) # Margo (young & dead)
         self.assertEqual(individuals["@I4@"].getAge(), 33) # Stuart (adult & alive)
@@ -89,6 +88,17 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), -5000)) # same day, should be true if range is negative
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be true if range is 10
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be false if range is -10
+
+    def testStory38(self):
+        '''List upcoming birthdays (note these test cases will only work properly for the rest of the semester, and for an UPCOMING_LIMIT of 90)'''
+        self.assertTrue(upcomingBirthday(individuals["@I7@"])) # upcoming birthday, this year (Tim: Dec)
+        self.assertTrue(upcomingBirthday(individuals["@I2@"])) # upcoming birthday, next year (Gru: Jan)
+        self.assertFalse(upcomingBirthday(individuals["@I5@"])) # not upcoming birthday (Kevin: Aug)
+        self.assertFalse(upcomingBirthday(individuals["@I6@"])) # upcoming birthday but individual is deceased (Margo: Jan)
+        self.assertFalse(upcomingBirthday(individuals["@I10@"])) # not upcoming birthday and individual is deceased (Agnes: Apr)
+
+    def testStory39(self):
+        '''List upcoming anniversaries'''
 
     gedcom_file.close()
 
