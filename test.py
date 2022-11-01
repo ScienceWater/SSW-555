@@ -94,11 +94,16 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(upcomingBirthday(individuals["@I7@"])) # upcoming birthday, this year (Tim: Dec)
         self.assertTrue(upcomingBirthday(individuals["@I2@"])) # upcoming birthday, next year (Gru: Jan)
         self.assertFalse(upcomingBirthday(individuals["@I5@"])) # not upcoming birthday (Kevin: Aug)
-        self.assertFalse(upcomingBirthday(individuals["@I6@"])) # upcoming birthday but individual is deceased (Margo: Jan)
+        self.assertFalse(upcomingBirthday(individuals["@I6@"])) # upcoming birthday, next year, but individual is deceased (Margo: Jan)
         self.assertFalse(upcomingBirthday(individuals["@I10@"])) # not upcoming birthday and individual is deceased (Agnes: Apr)
 
     def testStory39(self):
-        '''List upcoming anniversaries'''
+        '''List upcoming anniversaries (note these test cases will only work properly for the rest of the semester, and for an UPCOMING_LIMIT of 90)'''
+        self.assertTrue(upcomingAnniversary(families["@F2@"])) # upcoming anniversary, this year (Stuart & Agnes: Dec)
+        self.assertTrue(upcomingAnniversary(families["@F3@"])) # upcoming anniversary, next year (Stuart & Edith: Jan)
+        self.assertFalse(upcomingAnniversary(families["@F4@"])) # upcoming anniversary, next year, but couple is divorced (Kevin & Margo: Jan)
+        self.assertFalse(upcomingAnniversary(families["@F5@"])) # not upcoming anniversary and couple is divorced (Bob & Isabelle: Oct 10)
+        self.assertFalse(upcomingAnniversary(families["@F1@"])) # not upcoming anniversary and couple is divorced and marriage date in future (Gru & Lucy: May)
 
     gedcom_file.close()
 
