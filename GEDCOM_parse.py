@@ -9,8 +9,8 @@ from datetime import date
 TAGS = {"INDI": 0, "NAME": 1, "SEX": 1, "BIRT": 1, "DEAT": 1, "FAMC": 1, "FAMS": 1, "FAM": 0, "MARR": 1,\
         "HUSB": 1, "WIFE": 1, "CHIL": 1, "DIV": 1, "DATE": 2, "HEAD": 0, "TRLR": 0, "NOTE": 0}
 
-RECENT_LIMIT = 20 # Maximum number of days before today a date can be to be considered "recent."
-UPCOMING_LIMIT = 20 # Maximum number of days after today a date can be to be considered "upcoming."
+RECENT_LIMIT = 90 # Maximum number of days before today a date can be to be considered "recent."
+UPCOMING_LIMIT = 90 # Maximum number of days after today a date can be to be considered "upcoming."
 
 individuals = dict()
 families = dict()
