@@ -79,7 +79,7 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("12 NOV 1991"), 1)) # same day, should be true if range is positive
         self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("12 NOV 1991"), -5000)) # same day, should be true if range is negative
         self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("21 NOV 1991"), 10)) # 9 days after, should be true if range is 10
-        self.assertTrue(individuals["@I1@"].getBirth().withinRange(Date("21 NOV 1991"), 10)) # 9 days after, should be false if range is -10
+        self.assertFalse(individuals["@I1@"].getBirth().withinRange(Date("21 NOV 1991"), -10)) # 9 days after, should be false if range is -10
     
     def testStory36(self):
         '''List recent deaths (test cases directly access withinRange function for consistent results regardless of current date)'''
@@ -87,7 +87,7 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), 1)) # same day, should be true if range is positive
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("17 JAN 2015"), -5000)) # same day, should be true if range is negative
         self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be true if range is 10
-        self.assertTrue(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), 10)) # 9 days after, should be false if range is -10
+        self.assertFalse(individuals["@I6@"].getDeath().withinRange(Date("26 JAN 2015"), -10)) # 9 days after, should be false if range is -10
 
     def testStory38(self):
         '''List upcoming birthdays (note these test cases will only work properly for the rest of the semester, and for an UPCOMING_LIMIT of 90)'''
