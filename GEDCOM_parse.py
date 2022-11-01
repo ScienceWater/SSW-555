@@ -249,7 +249,7 @@ def recentDateCheck():
 
 def upcomingBirthday(indi):
     '''Returns true iff indi's birthday is within the next UPCOMING_LIMIT days.'''
-    if indi.getBirth():
+    if indi.getBirth() and not indi.getDeath():
         today = date.today()
         today = Date(str(today.day) + " " + list(MONTHS.keys())[today.month - 1] + " " + str(today.year))
         birthday = indi.getBirth()
