@@ -214,12 +214,12 @@ def marriedToSibling(indi):
     # Checks if indi and their spouse are children of the same family, for each family in which indi is a spouse
     if indi.getSex() == "M":
         for fam in indi.getFamS():
-            if indi.getFamC() == individuals[fam.getWife()].getFamC():
-                return fam.getWife()
+            if indi.getFamC() == individuals[families[fam].getWife()].getFamC():
+                return families[fam].getWife()
     if indi.getSex() == "F":
         for fam in indi.getFamS():
-            if indi.getFamC() == individuals[fam.getHusb()].getFamC():
-                return fam.getHusb()
+            if indi.getFamC() == individuals[families[fam].getHusb()].getFamC():
+                return families[fam].getHusb()
     return False
 
 def birthIsRecent(indi):
