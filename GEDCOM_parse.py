@@ -204,6 +204,11 @@ def under150Years(indi):
     age = indi.getAge()
     return (not age) or age < 150
 
+def fewerThan15Siblings(fam):
+    '''Returns true iff fam has fewer than 15 siblings'''
+    num_siblings = len(fam.getChildren())
+    return num_siblings < 15
+
 def birthIsRecent(indi):
     '''Returns true iff indi was born within the past RECENT_LIMIT days.'''
     if indi.getBirth():
@@ -304,6 +309,9 @@ def anomalyCheck():
     for indi in individuals.values():
         if not under150Years(indi):
             print("Anomaly: Individual " + str(indi.getID()) + " is " + str(indi.getAge()) + " years old. Are you sure that's correct?")
+    for fam in families.values():
+        if not fewerThan15Siblings(fam):
+            print("Anomoly: Family " + str(fam.getID()) + " has " + str(len(fam.getChildren())) + " siblings. Are you sure that's correct?")
 
 def errorCheck():
     for indi in individuals.values():
