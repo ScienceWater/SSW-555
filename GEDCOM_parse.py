@@ -209,6 +209,19 @@ def fewerThan15Siblings(fam):
     num_siblings = len(fam.getChildren())
     return num_siblings < 15
 
+def marriedToSibling(indi):
+    '''Returns true iff indi is married to a sibling'''
+    # Checks if indi and their spouse are children of the same family, for each family in which indi is a spouse
+    if indi.getSex() == "M":
+        for fam in indi.getFamS():
+            if indi.getFamC() == individuals[fam.getWife()].getFamC():
+                return fam.getWife()
+    if indi.getSex() == "F":
+        for fam in indi.getFamS():
+            if indi.getFamC() == individuals[fam.getHusb()].getFamC():
+                return fam.getHusb()
+    return False
+
 def birthIsRecent(indi):
     '''Returns true iff indi was born within the past RECENT_LIMIT days.'''
     if indi.getBirth():
@@ -309,6 +322,8 @@ def anomalyCheck():
     for indi in individuals.values():
         if not under150Years(indi):
             print("Anomaly: Individual " + str(indi.getID()) + " is " + str(indi.getAge()) + " years old. Are you sure that's correct?")
+        if marriedToSibling(indi):
+            print("Anomoly: Individual " + str(indi.getID()) + " is married to a sibling (individual " + marriedToSibling(indi) + "). Are you sure that's correct?")
     for fam in families.values():
         if not fewerThan15Siblings(fam):
             print("Anomoly: Family " + str(fam.getID()) + " has " + str(len(fam.getChildren())) + " siblings. Are you sure that's correct?")
