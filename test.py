@@ -57,6 +57,14 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(under150Years(individuals["@I11@"])) # 1 year old (Dave)
         self.assertTrue(under150Years(individuals["@I7@"])) # not born yet/negative age (Tim)
 
+    def testStory15(self):
+        '''Fewer than 15 siblings'''
+        self.assertTrue(fewerThan15Siblings(families["@F5@"])) # 0 siblings
+        self.assertTrue(fewerThan15Siblings(families["@F1@"])) # 3 siblings
+        # 14 siblings
+        # 15 siblings
+        # 16 siblings
+
     def testStory27(self):
         '''Include individual ages (note these test cases will only work properly for the rest of the semester)'''
         self.assertEqual(individuals["@I11@"].getAge(), 1) # Dave (young & alive)
