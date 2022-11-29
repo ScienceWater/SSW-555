@@ -83,26 +83,26 @@ def gedcom_parse(file):
         #       ('Y' if (tag in TAGS and TAGS[tag] == level) else 'N') + '|' + args)
 
         if working and level == 0:
-            if current_tag == "INDI":
+            if current_tag == "INDI" and individual:
                 individuals[current_id] = individual
                 individual = ""
-            elif current_tag == "FAM":
+            elif current_tag == "FAM" and family:
                 families[current_id] = family
                 family = ""
             working = False
 
         if tag == "INDI":
-            individual = Individual(args)
+            individual = createValidIndi(args)
             working = True
             current_tag = tag
             current_id = args
         elif tag == "FAM":
-            family = Family(args)
+            family = createValidFam(args)
             working = True
             current_tag = tag
             current_id = args
 
-        if current_tag == "INDI":
+        if current_tag == "INDI" and individual:
             if tag == "NAME":
                 individual.setName(args)
             elif tag == "SEX":
@@ -120,7 +120,7 @@ def gedcom_parse(file):
                 if date_tag == "DEAT":
                     individual.setDeath(createValidDate(args))
                     date_tag = ""
-        elif current_tag == "FAM":
+        elif current_tag == "FAM" and family:
             if tag == "MARR" or tag == "DIV":
                 date_tag = tag
             elif tag == "HUSB":
@@ -356,6 +356,24 @@ def createValidDate(args):
         return d
     else:
         print("Error: " + args + " is not a valid date.")
+
+def createValidIndi(args):
+    '''Creates and returns an Individual object iff args is a unique ID.
+       Returns False and prints an error message iff args is an ID that has already been used for an Individual.'''
+    if args in individuals:
+        print("Error: " + args + " is a repeated Individual ID.")
+        return False
+    else:
+        return Individual(args)
+
+def createValidFam(args):
+    '''Creates and returns a Family object iff args is a unique ID.
+       Returns False and prints an error message iff args is an ID that has already been used for a Family.'''
+    if args in families:
+        print("Error: " + args + " is a repeated Family ID.")
+        return False
+    else:
+        return Family(args)
 
 def main(argv):
     if len(argv) != 2:
