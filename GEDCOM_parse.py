@@ -92,15 +92,15 @@ def gedcom_parse(file):
             working = False
 
         if tag == "INDI":
-            individual = createValidIndi(args)
+            individual = Individual(args)
             working = True
             current_tag = tag
-            current_id = individual.getID()
+            current_id = args
         elif tag == "FAM":
-            family = createValidFam(args)
+            family = Family(args)
             working = True
             current_tag = tag
-            current_id = family.getID()
+            current_id = args
 
         if current_tag == "INDI":
             if tag == "NAME":
@@ -356,27 +356,6 @@ def createValidDate(args):
         return d
     else:
         print("Error: " + args + " is not a valid date.")
-
-def createValidIndi(args):
-    '''Creates and returns an Individual object with a unique ID. If a duplicate ID is detected, it will be resolved by appending a number.
-       For example, three identical ID's '@I1@' will resolve as '@I1@', '@I1@_0', and '@I1@_1'.'''
-    id = args
-    append = 0
-    while id in individuals or id in families:
-        id = args + '_' + str(append)
-        append += 1
-    return Individual(id)
-
-def createValidFam(args):
-    '''Creates and returns an Family object with a unique ID. If a duplicate ID is detected, it will be resolved by appending a number.
-       For example, three identical ID's '@F1@' will resolve as '@F1@', '@F1@_0', and '@F1@_1'.'''
-    id = args
-    append = 0
-    while id in individuals or id in families:
-        id = args + '_' + str(append)
-        append += 1
-    return Family(id)
-    
 
 def main(argv):
     if len(argv) != 2:
