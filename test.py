@@ -120,6 +120,17 @@ class TestSprint1(unittest.TestCase):
         self.assertFalse(upcomingAnniversary(families["@F4@"])) # upcoming anniversary, next year, but couple is divorced (Kevin & Margo: Jan)
         self.assertFalse(upcomingAnniversary(families["@F5@"])) # not upcoming anniversary and couple is divorced (Bob & Isabelle: Oct 10)
         self.assertFalse(upcomingAnniversary(families["@F1@"])) # not upcoming anniversary and couple is divorced and marriage date in future (Gru & Lucy: May)
+    
+    def testStory42(self):
+        '''Reject illegitimate dates'''
+        self.assertTrue(Date("15 APR 2022").exists()) # date exists, standard case
+        self.assertTrue(Date("1 JAN 2000").exists()) # date exists, first of month
+        self.assertTrue(Date("29 FEB 2020").exists()) # date exists, leap year
+        self.assertFalse(Date("29 FEB 2019").exists()) # date does not exist, not leap year (OOB by one)
+        self.assertFalse(Date("45 OCT 3000").exists()) # date does not exist, day far OOB
+        self.assertFalse(Date("0 SEP 1999").exists()) # date does not exist, day is zero
+        self.assertFalse(Date("-1 AUG 1942").exists()) # date does not exist, day is negative
+        self.assertFalse(Date("10 ABC 2040").exists()) # date does not exist, month does not exist
 
     gedcom_file.close()
 
