@@ -115,10 +115,10 @@ def gedcom_parse(file):
                 individual.addFamS(args)
             elif tag == "DATE":
                 if date_tag == "BIRT":
-                    individual.setBirth(Date(args))
+                    individual.setBirth(createValidDate(args))
                     date_tag = ""
                 if date_tag == "DEAT":
-                    individual.setDeath(Date(args))
+                    individual.setDeath(createValidDate(args))
                     date_tag = ""
         elif current_tag == "FAM":
             if tag == "MARR" or tag == "DIV":
@@ -131,10 +131,10 @@ def gedcom_parse(file):
                 family.addChild(args)
             elif tag == "DATE":
                 if date_tag == "MARR":
-                    family.setMarr(Date(args))
+                    family.setMarr(createValidDate(args))
                     date_tag = ""
                 if date_tag == "DIV":
-                    family.setDiv(Date(args))
+                    family.setDiv(createValidDate(args))
                     date_tag = ""
 
 def birthBeforeMarriage(indi):
@@ -347,6 +347,15 @@ def errorCheck():
             print("Error: Marriage date of Family " + str(fam.getID()) + " is in the future.")
         if not divorceBeforeCurrent(fam):
             print("Error: Divorce date of Family " + str(fam.getID()) + " is in the future.")
+
+def createValidDate(args):
+    '''Creates and returns a Date object iff args is a correct string representation of a date.
+       Returns False and prints an error message iff args is an incorrect string representation of a date.'''
+    d = Date(args)
+    if d.exists():
+        return d
+    else:
+        print("Error: " + args + " is not a valid date.")
 
 def main(argv):
     if len(argv) != 2:

@@ -96,3 +96,8 @@ class Date():
             return self <= other <= limit
         else:
             return limit <= other <= self
+    
+    def exists(self):
+        '''Returns true iff self represents a valid date. A date can be invalid because
+           the month does not exist or because the day does not exist within the given month/year.'''
+        return self.month in MONTHS and 1 <= self.day <= self.__daysInMonth
