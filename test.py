@@ -72,6 +72,14 @@ class TestSprint1(unittest.TestCase):
         self.assertFalse(marriedToSibling(individuals["@I4@"])) # individual has married multiple times, but not to any siblings
         self.assertEqual(marriedToSibling(individuals["@I30@"]), "@I29@") # individual has married once, and to a sibling (WIFE)
         self.assertEqual(marriedToSibling(individuals["@I29@"]), "@I30@") # individual has married once, and to a sibling (HUSB)
+    
+    def testStory22(self):
+        '''Unique IDs'''
+        self.assertEqual(individuals["@I59@"].getName(), "Envelope /Pratt/") # @I59@ has no duplicates
+        self.assertEqual(individuals["@I60@"].getName(), "Jalapeno /Pratt/") # @I60@ has one duplicate
+        self.assertEqual(individuals["@I61@"].getName(), "Febreeze /Pratt/") # @I61@ has two duplicates
+        self.assertEqual(families["@F2@"].getHusb(), "@I4@") # @F2@ has no duplicates
+        self.assertEqual(families["@F1@"].getHusb(), "@I2@") # @F1@ has one duplicate
 
     def testStory27(self):
         '''Include individual ages (note these test cases will only work properly for the rest of the semester)'''
