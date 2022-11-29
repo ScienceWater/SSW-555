@@ -61,17 +61,17 @@ class TestSprint1(unittest.TestCase):
         '''Fewer than 15 siblings'''
         self.assertTrue(fewerThan15Siblings(families["@F5@"])) # 0 siblings
         self.assertTrue(fewerThan15Siblings(families["@F1@"])) # 3 siblings
-        # 14 siblings
-        # 15 siblings
-        # 16 siblings
+        self.assertTrue(fewerThan15Siblings(families["@F7@"])) # 14 siblings
+        self.assertFalse(fewerThan15Siblings(families["@F8@"])) # 15 siblings
+        self.assertFalse(fewerThan15Siblings(families["@F6@"])) # 16 siblings
 
     def testStory18(self):
         '''Siblings should not marry'''
         self.assertFalse(marriedToSibling(individuals["@I7@"])) # individual has not married
         self.assertFalse(marriedToSibling(individuals["@I1@"])) # individual has married once, but not to a sibling
         self.assertFalse(marriedToSibling(individuals["@I4@"])) # individual has married multiple times, but not to any siblings
-        # individual has married once, and to a sibling
-        # individual has married multiple times, and once to a sibling
+        self.assertEqual(marriedToSibling(individuals["@I30@"]), "@I29@") # individual has married once, and to a sibling (WIFE)
+        self.assertEqual(marriedToSibling(individuals["@I29@"]), "@I30@") # individual has married once, and to a sibling (HUSB)
 
     def testStory27(self):
         '''Include individual ages (note these test cases will only work properly for the rest of the semester)'''
